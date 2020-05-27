@@ -26,6 +26,8 @@ hs_err_pid*
 # ignore generated directory
 */lib/*
 */out/*
+
+# ignore TestModules directory
 */applib/*
 */appmodules/*
 TestModules/mylinkedfromjarmodsvc/*
