@@ -7,7 +7,7 @@ import java.util.Scanner;
 
 class UniCalc {
     private final static String rexAra = "^(10|[1-9]) *[+-/*] *(10|[1-9])$";
-    private final static String rexRim = "^(V?I{1,3}|I?[VX]) *[+-/*] *(V?I{1,3}|I?[VX])$";
+    private final static String rexRom = "^(V?I{1,3}|I?[VX]) *[+-/*] *(V?I{1,3}|I?[VX])$";
 
     public static String calc(String exp) throws IllegalMathExpression {
         String[] nums = exp.split("[+\\-/*]");
@@ -19,7 +19,7 @@ class UniCalc {
             i2 = Integer.parseInt(nums[1].trim());
             result = Integer.toString(operation(exp, i1, i2));
         }
-        else if (exp.matches(rexRim)) {
+        else if (exp.matches(rexRom)) {
             i1 = RomNumConverter.romToInt(nums[0].trim());
             i2 = RomNumConverter.romToInt(nums[1].trim());
             result = RomNumConverter.intToRom(operation(exp, i1, i2));
@@ -53,7 +53,7 @@ class UniCalc {
 
 class RomNumConverter {
     private static final NavigableMap<Integer, String> aras;
-    private static final NavigableMap<Character, Integer> rims;
+    private static final NavigableMap<Character, Integer> roms;
     static {
         NavigableMap<Integer, String> initMap = new TreeMap<>();
         initMap.put(1000, "M");
@@ -79,7 +79,7 @@ class RomNumConverter {
         initRims.put('C', 100);
         initRims.put('D', 500);
         initRims.put('M', 1000);
-        rims = Collections.unmodifiableNavigableMap(initRims);
+        roms = Collections.unmodifiableNavigableMap(initRims);
     }
 
     public static String intToRom(int number) {
@@ -97,8 +97,8 @@ class RomNumConverter {
         int result = 0;
         for (int i = 0; i < rim.length(); i++) {
             if (i < rim.length() - 1) {
-                int k1 = rims.get(rim.charAt(i));
-                int k2 = rims.get(rim.charAt(i + 1));
+                int k1 = roms.get(rim.charAt(i));
+                int k2 = roms.get(rim.charAt(i + 1));
                 if (k2 > k1) {
                     ++i;
                     result += k2 - k1;
@@ -108,7 +108,7 @@ class RomNumConverter {
                 }
             }
             else {
-                result += rims.get(rim.charAt(i));
+                result += roms.get(rim.charAt(i));
             }
         }
         return result;
@@ -126,7 +126,7 @@ class IllegalMathExpression extends Exception {
 
 public class UniCalcTest {
     public static void main(String[] args) {
-        System.out.print("Введи выражение в формате 'число' + 'число': ");
+        System.out.print("Введи выражение в формате 'число' операция 'число': ");
         Scanner console = new Scanner(System.in);
         try {
             System.out.println(UniCalc.calc(console.nextLine()));
